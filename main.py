@@ -4,10 +4,23 @@ app = FastAPI()
 
 patients = {
     "john_smith": {
+        "name": "John Smith",
         "age": 54,
-        "vitals": {"heart_rate": 82, "blood_pressure": "130/85"},
-        "labs": {"HbA1c": "8.2%"},
-        "medications": ["Metformin", "Lisinopril"]
+        "medications": [
+        {"name": "Metformin", "dose": "500mg", "frequency": "2 daily"},
+        {"name": "Lisinopril", "dose": "500mg", "frequency": "once a day"}
+        ],
+        "mood": ["Frustrated", "Angry"],
+        "current_feeling" : ["Exhausted", "Achy"],
+        "appetite": ["Hungry"],
+        "occupation": "Retired Manager",
+        "spouse": [
+            {"name": "Sarah", "type":"Wife"}
+        ],
+        "dependants": [
+          {"name": "Sam", "type": "Son"},
+          {"name": "Michelle", "type": "Daughter"}
+        ]
     }
 }
 
