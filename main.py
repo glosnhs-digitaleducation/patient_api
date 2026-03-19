@@ -3,9 +3,9 @@ from fastapi import FastAPI
 app = FastAPI()
 
 patients = {
-    "john_smith": {
-        "name": "John Smith",
-        "age": 54,
+    "shamira_smith": {
+        "name": "Shamira Smith",
+        "age": 34,
         "medications": [
         {"name": "Metformin", "dose": "500mg", "frequency": "2 daily"},
         {"name": "Lisinopril", "dose": "500mg", "frequency": "once a day"}
@@ -13,9 +13,9 @@ patients = {
         "mood": ["Frustrated", "Angry"],
         "current_feeling" : ["Exhausted", "Achy"],
         "appetite": ["Hungry"],
-        "occupation": "Retired Manager",
+        "occupation": "Recruitment Manager",
         "spouse": [
-            {"name": "Sarah", "type":"Wife"}
+            {"name": "John", "type":"Husband"}
         ],
         "dependants": [
           {"name": "Sam", "type": "Son"},
