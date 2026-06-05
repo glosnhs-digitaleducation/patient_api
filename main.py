@@ -11,7 +11,13 @@ patients = {
         {"name": "Lisinopril", "dose": "500mg", "frequency": "once a day"}
         ],
         "mood": ["Frustrated", "Angry"],
-        "current_feeling" : ["Exhausted", "Achy"],
+        "current_feeling" : [
+            {"feeling": "Exhausted", "Achy"},
+            {"duration": "2 days"},
+        ],
+        "symptoms" : ["Cough", "Out of breath"],
+        "cough" : ["Coughing up green sputum"],
+        "sputum" : ["Coughing up green sputum"],
         "appetite": ["Hungry"],
         "occupation": "Recruitment Manager",
         "spouse": [
