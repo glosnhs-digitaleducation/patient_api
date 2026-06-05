@@ -12,7 +12,7 @@ patients = {
         ],
         "mood": ["Frustrated", "Angry"],
         "current_feeling" : [
-            {"feeling": "Exhausted", "Achy"},
+            {"feeling": ["Exhausted", "Achy"]},
             {"duration": "2 days"},
         ],
         "symptoms" : ["Cough", "Out of breath"],
