@@ -1,210 +1,146 @@
-from fastapi import FastAPI
 
-app = FastAPI()
+import json
+from pathlib import Path
 
-patients = {
+from fastapi import FastAPI, HTTPException
 
-{
-  "shamira_smith": {
-    "info": {
-      "name": "Shamira Smith",
-      "age": 34,
-      "sex": "female"
-    },
-    "history": [],
-    "medications": [
-      {
-        "name": "Metformin",
-        "dose": "500mg",
-        "frequency": "twice daily"
-      },
-      {
-        "name": "Lisinopril",
-        "dose": "10mg",
-        "frequency": "once daily"
-      }
-    ],
-    "mood": [
-      "Frustrated",
-      "Angry"
-    ],
-    "current_feeling": {
-      "feelings": [
-        "Exhausted",
-        "Achy"
-      ],
-      "duration": "2 days"
-    },
-    "symptoms": [
-      "Cough",
-      "Shortness of breath"
-    ],
-    "cough": [
-      "Coughing up green sputum"
-    ],
-    "sputum": [
-      "Green sputum"
-    ],
-    "appetite": [
-      "Hungry"
-    ],
-    "occupation": "Recruitment Manager",
-    "spouse": [
-      {
-        "name": "John",
-        "type": "Husband"
-      }
-    ],
-    "dependants": [
-      {
-        "name": "Sam",
-        "type": "Son"
-      },
-      {
-        "name": "Michelle",
-        "type": "Daughter"
-      }
-    ],
-    "phases": {
-      "1": {
-        "status": "stable",
-        "symptoms": [
-          "Cough",
-          "Shortness of breath",
-          "Fatigue",
-          "Body aches"
-        ],
-        "mood": [
-          "Frustrated",
-          "Angry"
-        ],
-        "vitals": {
-          "heart_rate": null,
-          "blood_pressure": null,
-          "respiratory_rate": null,
-          "oxygen_saturation": null,
-          "temperature": null
-        }
-      },
-      "2": {
-        "status": "deteriorating",
-        "symptoms": [
-          "Cough",
-          "Worsening shortness of breath",
-          "Fatigue",
-          "Body aches"
-        ],
-        "mood": [
-          "Frustrated",
-          "Anxious"
-        ],
-        "vitals": {
-          "heart_rate": null,
-          "blood_pressure": null,
-          "respiratory_rate": null,
-          "oxygen_saturation": null,
-          "temperature": null
-        }
-      }
-    }
-  },
-  "john_jones": {
-    "info": {
-      "name": "John Jones",
-      "age": 54,
-      "sex": "male"
-    },
-    "history": [
-      "Type 2 diabetes",
-      "Hypertension"
-    ],
-    "medications": [
-      {
-        "name": "Metformin",
-        "dose": null,
-        "frequency": null
-      },
-      {
-        "name": "Lisinopril",
-        "dose": null,
-        "frequency": null
-      }
-    ],
-    "mood": [
-      "Concerned",
-      "Anxious"
-    ],
-    "current_feeling": {
-      "feelings": [
-        "Chest discomfort"
-      ],
-      "duration": null
-    },
-    "symptoms": [
-      "Chest discomfort"
-    ],
-    "cough": [],
-    "sputum": [],
-    "appetite": [],
-    "occupation": null,
-    "spouse": [],
-    "dependants": [],
-    "phases": {
-      "1": {
-        "status": "stable",
-        "symptoms": [
-          "Mild chest discomfort"
-        ],
-        "mood": [
-          "Concerned"
-        ],
-        "vitals": {
-          "heart_rate": 82,
-          "blood_pressure": "130/85",
-          "respiratory_rate": 16,
-          "oxygen_saturation": 98,
-          "temperature": null
-        }
-      },
-      "2": {
-        "status": "deteriorating",
-        "symptoms": [
-          "Severe chest pain",
-          "Shortness of breath"
-        ],
-        "mood": [
-          "Anxious"
-        ],
-        "vitals": {
-          "heart_rate": 125,
-          "blood_pressure": "90/60",
-          "respiratory_rate": 28,
-          "oxygen_saturation": 91,
-          "temperature": null
-        }
-      }
-    }
-  }
-}
+app = FastAPI(
+    title="Medical Patient Simulation API"
+)
 
-}
+# Load patients from patients.json
+PATIENTS_FILE = Path(__file__).with_name("patients.json")
+
+with open(PATIENTS_FILE, "r", encoding="utf-8") as file:
+    patients = json.load(file)
+
+
+# ---------------------------------
+# HELPER FUNCTIONS
+# ---------------------------------
+
+def get_patient_data(patient_id: str):
+    patient = patients.get(patient_id)
+
+    if patient is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Patient not found"
+        )
+
+    return patient
+
+
+def get_current_phase(patient):
+    # For now, use phase 1 by default.
+    # Later, each consultation will have
+    # its own independently tracked phase.
+    return patient["phases"]["1"]
+
+
+# ---------------------------------
+# API STATUS
+# ---------------------------------
 
 @app.get("/")
 def root():
     return {"status": "API running"}
 
+
+# ---------------------------------
+# LIST PATIENTS
+# ---------------------------------
+
+@app.get("/patients")
+def list_patients():
+    return [
+        {
+            "id": patient_id,
+            "name": patient["info"]["name"],
+            "age": patient["info"]["age"]
+        }
+        for patient_id, patient in patients.items()
+    ]
+
+
+# ---------------------------------
+# FULL PATIENT INFORMATION
+# ---------------------------------
+
 @app.get("/patient/{id}")
 def get_patient(id: str):
-    return patients.get(id)
+    patient = get_patient_data(id)
+    phase = get_current_phase(patient)
+
+    return {
+        **{
+            key: value
+            for key, value in patient.items()
+            if key not in ("phases", "symptoms", "mood")
+        },
+        "symptoms": phase.get("symptoms", []),
+        "mood": phase.get("mood", []),
+        "vitals": phase.get("vitals", {}),
+        "status": phase.get("status", "unknown")
+    }
+
+
+# ---------------------------------
+# VITAL SIGNS
+# ---------------------------------
 
 @app.get("/patient/{id}/vitals")
 def get_vitals(id: str):
-    return patients[id]["vitals"]
+    patient = get_patient_data(id)
+    phase = get_current_phase(patient)
+
+    return phase.get("vitals", {})
+
+
+# ---------------------------------
+# LAB RESULTS
+# ---------------------------------
 
 @app.get("/patient/{id}/labs")
 def get_labs(id: str):
-    return patients[id]["labs"]
+    patient = get_patient_data(id)
+
+    return patient.get("labs", {})
+
+
+# ---------------------------------
+# MEDICATIONS
+# ---------------------------------
 
 @app.get("/patient/{id}/medications")
 def get_medications(id: str):
-    return patients[id]["medications"]
+    patient = get_patient_data(id)
+
+    return patient.get("medications", [])
+
+
+# ---------------------------------
+# MEDICAL HISTORY
+# ---------------------------------
+
+@app.get("/patient/{id}/history")
+def get_history(id: str):
+    patient = get_patient_data(id)
+
+    return patient.get("history", [])
+
+
+# ---------------------------------
+# CURRENT SYMPTOMS
+# ---------------------------------
+
+@app.get("/patient/{id}/symptoms")
+def get_symptoms(id: str):
+    patient = get_patient_data(id)
+    phase = get_current_phase(patient)
+
+    return {
+        "symptoms": phase.get("symptoms", []),
+        "mood": phase.get("mood", []),
+        "status": phase.get("status", "unknown")
+    }
