@@ -1,0 +1,64 @@
+{
+  "shamira_smith": {
+    "info": {"name": "Shamira Smith", "age": 34, "sex": "female"},
+    "history": ["Type 2 diabetes", "Hypertension"],
+    "medications": [
+      {"name": "Metformin", "dose": "500 mg", "frequency": "twice daily"},
+      {"name": "Lisinopril", "dose": "10 mg", "frequency": "once daily"}
+    ],
+    "mood": ["Frustrated", "Angry"],
+    "current_feeling": {"feelings": ["Exhausted", "Achy"], "duration": "2 days"},
+    "symptoms": ["Cough", "Shortness of breath", "Fatigue", "Body aches"],
+    "cough": ["Productive cough"],
+    "sputum": ["Green sputum"],
+    "appetite": ["Hungry"],
+    "occupation": "Recruitment Manager",
+    "spouse": [{"name": "John", "type": "Husband"}],
+    "dependants": [{"name": "Sam", "type": "Son"}, {"name": "Michelle", "type": "Daughter"}],
+    "phases": {
+      "1": {
+        "status": "initial_presentation",
+        "symptoms": ["Productive cough with green sputum", "Shortness of breath on exertion", "Fatigue", "Body aches"],
+        "mood": ["Frustrated", "Angry"],
+        "vitals": {"heart_rate": 104, "blood_pressure": "128/78", "respiratory_rate": 22, "oxygen_saturation": 95, "temperature": 38.2}
+      },
+      "2": {
+        "status": "deteriorating",
+        "symptoms": ["Productive cough with green sputum", "Worsening shortness of breath at rest", "Marked fatigue", "Fever"],
+        "mood": ["Anxious", "Distressed"],
+        "vitals": {"heart_rate": 128, "blood_pressure": "96/60", "respiratory_rate": 30, "oxygen_saturation": 89, "temperature": 39.1}
+      }
+    }
+  },
+  "john_jones": {
+    "info": {"name": "John Jones", "age": 54, "sex": "male"},
+    "history": ["Type 2 diabetes", "Hypertension"],
+    "medications": [
+      {"name": "Metformin", "dose": "500 mg", "frequency": "twice daily"},
+      {"name": "Lisinopril", "dose": "10 mg", "frequency": "once daily"}
+    ],
+    "mood": ["Concerned", "Anxious"],
+    "current_feeling": {"feelings": ["Chest discomfort"], "duration": "30 minutes"},
+    "symptoms": ["Chest discomfort"],
+    "cough": [],
+    "sputum": [],
+    "appetite": [],
+    "occupation": null,
+    "spouse": [],
+    "dependants": [],
+    "phases": {
+      "1": {
+        "status": "initial_presentation",
+        "symptoms": ["Central chest discomfort", "Mild nausea"],
+        "mood": ["Concerned"],
+        "vitals": {"heart_rate": 88, "blood_pressure": "146/88", "respiratory_rate": 18, "oxygen_saturation": 97, "temperature": 36.8}
+      },
+      "2": {
+        "status": "deteriorating",
+        "symptoms": ["Severe central chest pain", "Shortness of breath", "Sweating", "Dizziness"],
+        "mood": ["Anxious", "Distressed"],
+        "vitals": {"heart_rate": 124, "blood_pressure": "88/58", "respiratory_rate": 28, "oxygen_saturation": 92, "temperature": 36.7}
+      }
+    }
+  }
+}
